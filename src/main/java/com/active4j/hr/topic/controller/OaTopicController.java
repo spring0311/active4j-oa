@@ -4,9 +4,11 @@ package com.active4j.hr.topic.controller;
 import com.active4j.hr.base.controller.BaseController;
 import com.active4j.hr.core.model.AjaxJson;
 import com.active4j.hr.core.query.QueryUtils;
+import com.active4j.hr.core.shiro.ShiroUtils;
 import com.active4j.hr.core.util.ResponseUtil;
 import com.active4j.hr.core.util.StringUtil;
 import com.active4j.hr.core.web.tag.model.DataGrid;
+import com.active4j.hr.system.model.ActiveUser;
 import com.active4j.hr.topic.entity.OaTopic;
 import com.active4j.hr.topic.service.OaTopicService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -58,6 +60,8 @@ public class OaTopicController extends BaseController {
      */
     @RequestMapping(value = "table")
     public void topicTable(OaTopic oaTopic, HttpServletRequest request, HttpServletResponse response, DataGrid dataGrid) {
+        ActiveUser user = ShiroUtils.getSessionUser();
+        System.err.println(user);
         if ("".equals(oaTopic.getTopicName())) {
             oaTopic.setTopicName(null);
         }
@@ -86,9 +90,24 @@ public class OaTopicController extends BaseController {
     }
 
 
+    /**
+     * 新增议题
+     *
+     * @param oaTopic
+     * @return
+     */
+    @RequestMapping(value = "save")
     public AjaxJson saveOaTopic(OaTopic oaTopic) {
-
-        return null;
+        AjaxJson ajaxJson = new AjaxJson();
+        try {
+            topicService.saveOrUpdate(oaTopic);
+        } catch (Exception e) {
+            log.error("新增议题失败,错误信息:" + e.getMessage());
+            ajaxJson.setSuccess(false);
+            ajaxJson.setMsg("新增议题失败");
+            e.printStackTrace();
+        }
+        return ajaxJson;
     }
 
 
