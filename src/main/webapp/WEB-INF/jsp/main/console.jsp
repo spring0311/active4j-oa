@@ -73,7 +73,9 @@
         <ul>
             <li id="cor1"><b>12345案件统计</b></li>
             <li class="cor2"><a href="#" id="more"></a></li>
-            <li id="item"></li>
+            <li id="item">
+                <div id="main-yuan" style="width: 500px;height:400px;"></div>
+            </li>
 
         </ul>
     </div>
@@ -116,6 +118,7 @@
 </div>
 </body>
 <script type="text/javascript">
+    var myChart = echarts.init(document.getElementById('main-yuan'));
     var bingtu = '';
     search();
 
@@ -125,12 +128,54 @@
             url: 'oa/123456/postUrl',//目标地址
             success: function (data) {
                 bingtu = JSON.parse(data.obj);
-                console.log(bingtu);
+                eac(bingtu);
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
                 console.log(textStatus)
             }
         })
+    }
+
+    function eac(bingtu) {
+        var titleNumber = bingtu.data.total;
+        var number = bingtu.data.chart;
+        var option = {
+            title: {
+                text: '未完成人数统计',
+                left: titleNumber
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: '{a} <br/>{b} : {c} ({d}%)'
+            },
+            /*legend: {
+                orient: 'vertical',
+                left: 'left',
+                data: ['直接访问', '邮件营销', '联盟广告', '视频广告', '搜索引擎']
+            },*/
+            series: [
+                {
+                    name: '人数统计',
+                    type: 'pie',
+                    radius: '75%',
+                    center: ['50%', '60%'],
+                    data: number,
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ],
+            /*selected: {
+                // 选中'系列1'
+                '公司月会议': true,
+            }*/
+        };
+        myChart.setOption(option);
+
     }
 
 
