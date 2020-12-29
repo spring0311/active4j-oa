@@ -334,12 +334,20 @@
 </div>
 </body>
 <script type="text/javascript">
+    search();
+
     function search() {
         $.ajax({
             type: "post",
-            dataType: "text",
-            data: {"id": 0},
-            url: '/car/manage/list'//目标地址
+            dataType: "json",
+            data: {"id": "sdasdsa566"},
+            url: '/oa/topic/test',//目标地址
+            success: function (data) {
+                console.log(data);
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                console.log(textStatus)
+            }
         })
     }
 </script>

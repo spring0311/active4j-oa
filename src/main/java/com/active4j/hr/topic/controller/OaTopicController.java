@@ -3,7 +3,6 @@ package com.active4j.hr.topic.controller;
 
 import com.active4j.hr.base.controller.BaseController;
 import com.active4j.hr.core.model.AjaxJson;
-import com.active4j.hr.core.query.QueryUtils;
 import com.active4j.hr.core.shiro.ShiroUtils;
 import com.active4j.hr.core.util.ResponseUtil;
 import com.active4j.hr.core.util.StringUtil;
@@ -108,6 +107,14 @@ public class OaTopicController extends BaseController {
             e.printStackTrace();
         }
         return ajaxJson;
+    }
+
+    @RequestMapping(value = "test")
+    public AjaxJson testGet(OaTopic oaTopic) {
+        AjaxJson json = new AjaxJson();
+        oaTopic = topicService.getById(oaTopic.getId());
+        json.setObj(oaTopic);
+        return json;
     }
 
 
