@@ -6,6 +6,7 @@
     <t:base type="default"></t:base>
     <link rel="stylesheet" href="css/index.css"/>
     <link href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts-all-3.js"></script>
 </head>
 <body>
 <%--<div id="herder">
@@ -74,7 +75,7 @@
             <li id="cor1"><b>12345案件统计</b></li>
             <li class="cor2"><a href="#" id="more"></a></li>
             <li id="item">
-                <div id="main-yuan" style="width: 500px;height:400px;"></div>
+                <div id="main-yuan" style="width: 100px;height:100px;"></div>
             </li>
 
         </ul>
@@ -140,39 +141,37 @@
         var titleNumber = bingtu.data.total;
         var number = bingtu.data.chart;
         var option = {
-            title: {
-                text: '未完成人数统计',
-                left: titleNumber
-            },
             tooltip: {
                 trigger: 'item',
                 formatter: '{a} <br/>{b} : {c} ({d}%)'
             },
-            /*legend: {
+            legend: {
                 orient: 'vertical',
-                left: 'left',
-                data: ['直接访问', '邮件营销', '联盟广告', '视频广告', '搜索引擎']
-            },*/
+                left: 10,
+            },
             series: [
                 {
-                    name: '人数统计',
+                    name: '访问来源',
                     type: 'pie',
-                    radius: '75%',
-                    center: ['50%', '60%'],
-                    data: number,
+                    radius: ['50%', '70%'],
+                    avoidLabelOverlap: false,
+                    label: {
+                        show: false,
+                        position: 'center'
+                    },
                     emphasis: {
-                        itemStyle: {
-                            shadowBlur: 10,
-                            shadowOffsetX: 0,
-                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        label: {
+                            show: true,
+                            fontSize: '30',
+                            fontWeight: 'bold'
                         }
-                    }
+                    },
+                    labelLine: {
+                        show: false
+                    },
+                    data: number
                 }
             ],
-            /*selected: {
-                // 选中'系列1'
-                '公司月会议': true,
-            }*/
         };
         myChart.setOption(option);
 
