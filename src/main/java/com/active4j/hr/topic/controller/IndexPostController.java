@@ -27,21 +27,30 @@ import java.io.IOException;
 public class IndexPostController extends BaseController {
 
 
-    @RequestMapping(value = "postUrl")
-    public AjaxJson testGet(OaTopic oaTopic) {
+    @RequestMapping(value = "getAll")
+    public AjaxJson getAll() {
         AjaxJson json = new AjaxJson();
         //http post
-        json.setObj(postUrl());
+        String url = "http://123.56.249.251:9001/admin/index/getTodayTotalByOA";
+        json.setObj(postUrl(url));
+        return json;
+    }
+
+    @RequestMapping(value = "getNum")
+    public AjaxJson getNum() {
+        AjaxJson json = new AjaxJson();
+        String url = "http://123.56.249.251:9001/admin/index/getIsOverByOA";
+        json.setObj(postUrl(url));
         return json;
     }
 
     /**
      * 访问请求  oa/123456/postUrl
      */
-    private String postUrl() {
+    private String postUrl(String url) {
         String back = "";
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
-        HttpPost httpPost = new HttpPost("http://123.56.249.251:9001/admin/index/getTodayTotalByOA");
+        HttpPost httpPost = new HttpPost(url);
         CloseableHttpResponse response = null;
         try {
             // 由客户端执行(发送)Post请求

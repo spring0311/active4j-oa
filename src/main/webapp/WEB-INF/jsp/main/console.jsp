@@ -75,7 +75,12 @@
             <li id="cor1"><b>12345案件统计</b></li>
             <li class="cor2"><a href="#" id="more"></a></li>
             <li id="item">
-                <div id="main-yuan" style="width: 100px;height:100px;"></div>
+                <div>
+                    <div id="main-number"
+                         style="width: 150px;height:150px;float: right;z-index: 9999999"></div>
+                    <div id="main-dept"
+                         style="width: 150px;height:150px; float: left;z-index: 9999999"></div>
+                </div>
             </li>
 
         </ul>
@@ -119,14 +124,16 @@
 </div>
 </body>
 <script type="text/javascript">
-    var myChart = echarts.init(document.getElementById('main-yuan'));
+    var myChart = echarts.init(document.getElementById('main-number'));
+    var myChart_two = echarts.init(document.getElementById('main-dept'));
     var bingtu = '';
     search();
+    getNum();
 
     function search() {
         $.ajax({
             type: "post",
-            url: 'oa/123456/postUrl',//目标地址
+            url: 'oa/123456/getAll',//目标地址
             success: function (data) {
                 bingtu = JSON.parse(data.obj);
                 eac(bingtu);
@@ -137,27 +144,103 @@
         })
     }
 
-    function eac(bingtu) {
+    function getNum() {
+        $.ajax({
+            type: "post",
+            url: 'oa/123456/getNum',//目标地址
+            success: function (data) {
+                bingtu = JSON.parse(data.obj);
+                numeac(bingtu);
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                console.log(textStatus)
+            }
+        })
+    }
+
+    function numeac(bingtu) {
         var titleNumber = bingtu.data.total;
         var number = bingtu.data.chart;
-        var option = {
+        var numberBL = bingtu.data.point;
+        var option_two = {
+            title: {
+                text: '今日办结率:' + numberBL,
+                subtext: numberBL,
+                left: 'center'
+            },
             tooltip: {
                 trigger: 'item',
+                confine: true,
                 formatter: '{a} <br/>{b} : {c} ({d}%)'
             },
             legend: {
                 orient: 'vertical',
                 left: 10,
+                data: []
             },
             series: [
                 {
-                    name: '访问来源',
                     type: 'pie',
                     radius: ['50%', '70%'],
                     avoidLabelOverlap: false,
                     label: {
                         show: false,
-                        position: 'center'
+                        position: 'center',
+                        normal: {
+                            position: 'inner',
+                            show: false
+                        }
+                    },
+                    emphasis: {
+                        label: {
+                            show: true,
+                            fontSize: '30',
+                            fontWeight: 'bold'
+                        }
+                    },
+                    labelLine: {
+                        show: false
+                    },
+                    data: number
+                }
+            ],
+        };
+        myChart_two.setOption(option_two);
+    }
+
+
+    function eac(bingtu) {
+        var titleNumber = bingtu.data.total;
+        var number = bingtu.data.chart;
+        var numberSL = bingtu.data.total;
+        var option = {
+            title: {
+                text: '今日案件数量:' + numberSL,
+                subtext: numberSL,
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'item',
+                confine: true,
+                formatter: '{a} <br/>{b} : {c} ({d}%)'
+            },
+            legend: {
+                orient: 'vertical',
+                left: 10,
+                data: []
+            },
+            series: [
+                {
+                    type: 'pie',
+                    radius: ['50%', '70%'],
+                    avoidLabelOverlap: false,
+                    label: {
+                        show: false,
+                        position: 'center',
+                        normal: {
+                            position: 'inner',
+                            show: false
+                        }
                     },
                     emphasis: {
                         label: {
@@ -174,7 +257,6 @@
             ],
         };
         myChart.setOption(option);
-
     }
 
 
